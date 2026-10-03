@@ -1,0 +1,21 @@
+# Compiled object files
+*.o
+*.obj
+
+# Executables
+crossword
+*.exe
+*.out
+
+# Build directory
+obj/
+
+# IDE folders
+.vscode/
+.vs/
+*.iml
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
