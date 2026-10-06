@@ -1,3 +1,10 @@
+/*
+ *--------------------------------------
+ * Program Name: CrossWord generator
+ * Author: Sunaina Sharma
+ * License:LINCENSE
+ *--------------------------------------
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,8 +18,17 @@ typedef enum {EASY, MEDIUM, HARD} Difficulty;
 #define MAX_WORDS 500
 #define MAX_WORD_LENGTH 20
 
+/*
+ * Read one word per line from `filename` into `words`.
+ * Returns the number of words read, or -1 if the file couldn't be opened.
+ *
+ * TODO: implement this. It's the file-handling step: fopen -> read
+ * line by line -> fclose. Rough shape to work from:
+ */
+
 int loadWordsFromFile(const char* filename, char words[][MAX_WORD_LENGTH + 1], int maxWords) {
 
+    return 0; /* placeholder */
 }
 
 int main(int args, char* argv[]) {
