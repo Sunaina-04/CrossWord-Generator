@@ -11,7 +11,7 @@ typedef struct WordNode {
 
 typedef struct {
     WordNode* buckets[MAX_WORD_LEN + 1];
-}LengthHashTable;
+} LengthHashTable;
 
 // allocate and zero-initialize a new table
 LengthHashTable* hashtableCreate(void);
