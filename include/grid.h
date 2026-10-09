@@ -2,8 +2,8 @@
 #define GRID_H
 
 #define GRID_SIZE 15
-#define EMPTY_CELL
-#define BLACK_CELL
+#define EMPTY_CELL '.'
+#define BLACK_CELL '#'
 
 
 typedef enum {ACROSS, DOWN} Direction;
@@ -13,7 +13,7 @@ typedef struct {
 } Grid;
 
 // fill every cell with EMPTY_CELL
-void grifInit(Grid* grid);
+void gridInit(Grid* grid);
 
 // print grid one row per line 
 void gridPrint(const Grid* grid);
@@ -25,6 +25,6 @@ int gridIsValidPlacement (const Grid* grid, int row, int col, Direction directio
 void gridPlaceWord(Grid* grid, int row, int col, Direction direction, const char* word);
 
 // undo placement made by gridPlaceWord
-void gridRemoveWors(Grid* grid, int wor, int col, Direction direction, int length);
+void gridRemoveWords(Grid* grid, int wor, int col, Direction direction, int length);
 
 #endif
