@@ -60,16 +60,30 @@ int trieStartsWith(TrieNode* root, const char* prefix){
 
 // return 1 if word in trie matches 'pattern', where pattern uses '_' as a wildcard for 'letter not known yet' 
 int trieMatchPattern(TrieNode* root, const char* pattern){
-     /* TODO (the interesting one):
-     * This needs recursion, not a simple loop, because '_' means
-     * "try every possible letter here."
-     *
-     * Base case: if *pattern == '\0', return root->isEndOfWord.
-     * If *pattern == '_': try trieMatchPattern(child, pattern+1) for
-     *   every non-NULL child; return 1 if any succeeds.
-     * Otherwise: follow the single matching child, same as trieSearch,
-     *   and recurse with pattern+1.
-     */
+    if (root == NULL) {
+        return 0;
+    }
+
+    // base case:
+    if (*pattern == '\0') {
+        return root->isEndOfWord;
+    }
+
+    if (*pattern == '_') {
+        for (int i = 0; i < ALPHABET_SIZE; i++) {
+            if (root->children[i] != NULL &&
+                trieMatchPattern(root->children[i], pattern + 1)) {
+                    return 1;
+                }
+        }
+        return 0;
+    } else {
+        int index = *pattern - 'a';
+        if (root-> children[index] ==  NULL) {
+            return 0;
+        }
+        return trieMatchPattern(root->children[index], pattern + 1);
+    }
 }
 
 void trieFree(TrieNode* root) {

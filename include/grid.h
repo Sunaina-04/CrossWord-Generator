@@ -5,6 +5,7 @@
 #define EMPTY_CELL '.'
 #define BLACK_CELL '#'
 
+#define MIN_SLOT_LENGTH 3 
 
 typedef enum {ACROSS, DOWN} Direction;
 
@@ -15,6 +16,9 @@ typedef struct {
 // fill every cell with EMPTY_CELL
 void gridInit(Grid* grid);
 
+// return 1 if black-sqaure layout is usable as a crossword, else 0;
+int gridLayoutIsClean(const Grid* grid);
+
 // print grid one row per line 
 void gridPrint(const Grid* grid);
 
@@ -23,8 +27,5 @@ int gridIsValidPlacement (const Grid* grid, int row, int col, Direction directio
 
 // write 'word' into the grid starting at (row,column)
 void gridPlaceWord(Grid* grid, int row, int col, Direction direction, const char* word);
-
-// undo placement made by gridPlaceWord
-void gridRemoveWords(Grid* grid, int wor, int col, Direction direction, int length);
 
 #endif

@@ -32,63 +32,49 @@ void slotListAdd(SlotList* list, Slot slot) {
     list->slots[list->count++] = slot;
 }
 
-SlotList* slotListFromGrid(const Grid* grid) {
-    if (!grid) return NULL;
-
-    SlotList* list = slotListCreate(16);
-    if (!list) return NULL;
-
-    // 1. Scan Horizontal (ACROSS)
-    for (int r = 0; r < GRID_SIZE; r++) {
-        int c = 0;
-        while (c < GRID_SIZE) {
-            if (grid->cells[r][c] == BLACK_CELL) {
-                c++;
-                continue;
-            }
-
-            int startCol = c;
-            int length = 0;
-            while (c < GRID_SIZE && grid->cells[r][c] != BLACK_CELL) {
-                length++;
-                c++;
-            }
-
-            if (length >= 2) {
-                Slot slot = { r, startCol, length, ACROSS };
-                slotListAdd(list, slot);
-            }
-        }
-    }
-
-    // 2. Scan Vertical (DOWN)
-    for (int c = 0; c < GRID_SIZE; c++) {
-        int r = 0;
-        while (r < GRID_SIZE) {
-            if (grid->cells[r][c] == BLACK_CELL) {
-                r++;
-                continue;
-            }
-
-            int startRow = r;
-            int length = 0;
-            while (r < GRID_SIZE && grid->cells[r][c] != BLACK_CELL) {
-                length++;
-                r++;
-            }
-
-            if (length >= 2) {
-                Slot slot = { startRow, c, length, DOWN };
-                slotListAdd(list, slot);
-            }
-        }
-    }
-
-    return list;
-}
-
 void slotListFree(SlotList* list) {
     if (!list) return;
     free(list->slots);
     free(list);
+}
+
+static void scanLine(const Grid* grid, SlotList* list, int line,
+                      Direction direction) {
+    int runStart = -1;
+ 
+    for (int pos = 0; pos <= GRID_SIZE; pos++) {
+        int open = 0;
+        if (pos < GRID_SIZE) {
+            char cell = (direction == ACROSS) ? grid->cells[line][pos]
+                                              : grid->cells[pos][line];
+            open = (cell != BLACK_CELL);
+        }
+        /* pos == GRID_SIZE counts as "not open", ending the last run. */
+ 
+        if (open) {
+            if (runStart < 0) runStart = pos;
+        } else if (runStart >= 0) {
+            int length = pos - runStart;
+            if (length >= MIN_SLOT_LENGTH) {
+                Slot slot;
+                slot.row = (direction == ACROSS) ? line : runStart;
+                slot.col = (direction == ACROSS) ? runStart : line;
+                slot.length = length;
+                slot.direction = direction;
+                slotListAdd(list, slot);
+            }
+            runStart = -1;
+        }
+    }
+}
+ 
+SlotList* slotListFromGrid(const Grid* grid) {
+    SlotList* list = slotListCreate(16);
+    for (int line = 0; line < GRID_SIZE; line++) {
+        scanLine(grid, list, line, ACROSS);
+    }
+    for (int line = 0; line < GRID_SIZE; line++) {
+        scanLine(grid, list, line, DOWN);
+    }
+    return list;
 }
